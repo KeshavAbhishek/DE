@@ -109,7 +109,7 @@
 # EXPERIMENT 2 (DATABASE ENGINEERING)
 # `Q1`
 * `CREATE TABLE CGU(Name VARCHAR(100), Roll_no NUMBER(8,0) PRIMARY KEY, Department_name VARCHAR(100) NOT NULL, semester VARCHAR(10) NOT NULL, Phone_no NUMBER(10,0) NOT NULL, Grade VARCHAR(2) NOT NULL);`
-![Alt text](image.png)
+![Alt text](IMAGES/image.png)
 ---
 * `INSERT ALL`
 * `INTO CGU VALUES('Mickey', 2201023, 'CSE', '4th', 9080765123, 'A')`
