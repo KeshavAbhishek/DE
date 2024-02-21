@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBE | LAB5</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        div{
+            width: 100dvw;
+            height: 100dvh;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .child{
+            margin: 20px 0;
+            
+            border-radius: 10px;
+            outline: none !important;
+        }
+
+        input{
+            font-size: 30px;
+            border: 2px dotted red;
+            text-align: center;
+            padding: 10px 0;
+            width: 70vw;
+        }
+
+        input::-webkit-inner-spin-button{
+            display: none !important;
+        }
+
+        button{
+            border: none;
+            background: red;
+            font-weight: bolder;
+            color: white;
+            font-size: 25px;
+            cursor: pointer;
+            padding: 20px;
+        }
+
+        h1{
+            text-align: center;
+            width: 100dvw;
+            padding: 20px 0;
+        }
+
+        #textarea{
+            width: 90% !important;
+            background: rgba(0, 0, 0, 0.1);
+            border: 2px dotted red;
+            padding: 10px;
+            outline: none !important;
+        }
+    </style>
+</head>
+<body>
+    <h1>DBE | LAB5</h1>
+    <div>
+        <textarea id="textarea" cols="30" rows="10" readonly></textarea>
+        <input class="child" type="number" placeholder="Enter Regd. No.">
+        <button class="child">Copy Command</button>
+    </div>
+    <script defer>
+        document.getElementById("textarea").value="NO command";
+        var input = document.getElementsByClassName('child')[0];
+        var button = document.getElementsByClassName('child')[1];
+
+        button.addEventListener("click",(e)=>{
+            if(!input.value){
+                alert("Enter reg no.");
+            }
+            else{
+                var content = `
+CREATE TABLE EMPLOYEES_${input.value}(
+Emp_id NUMBER(10,0) PRIMARY KEY,
+Emp_name VARCHAR(100),
+Emp_salary NUMBER(10,0),
+Emp_department VARCHAR(100)
+);
+
+INSERT ALL
+INTO EMPLOYEES_${input.value} VALUES(1, 'Alice', 50000, 'HR')
+INTO EMPLOYEES_${input.value} VALUES(2, 'Bob', 60000, 'IT')
+INTO EMPLOYEES_${input.value} VALUES(3, 'Charile', 75000, 'Finance')
+INTO EMPLOYEES_${input.value} VALUES(4, 'David', 55000, 'Marketing')
+INTO EMPLOYEES_${input.value} VALUES(5, 'Emily', 70000, 'IT')
+SELECT * FROM DUAL;
+
+
+-- 
+CREATE TABLE PROJECTS_${input.value}
+(Project_id NUMBER(5,0) PRIMARY KEY,
+Project_name VARCHAR(100),
+Project_budget NUMBER(10,0),
+Start_date date
+);
+
+INSERT ALL
+INTO PROJECTS_${input.value} VALUES(101, 'Project A', 100000, '01-15-2023')
+INTO PROJECTS_${input.value} VALUES(102, 'Project B', 75000, '02-01-2023')
+INTO PROJECTS_${input.value} VALUES(103, 'Project C', 120000, '03-10-2023')
+INTO PROJECTS_${input.value} VALUES(104, 'Project D', 90000, '04-05-2022')
+INTO PROJECTS_${input.value} VALUES(105, 'Project E', 80000, '05-20-2023')
+SELECT * FROM DUAL;
+
+
+-- 
+CREATE TABLE ASSIGNMENTS_${input.value}
+(
+Emp_id NUMBER(5,0),
+Project_id NUMBER(5,0),
+Hours_worked NUMBER(5,0)
+);
+
+DESC ASSIGNMENTS_${input.value};
+
+INSERT ALL
+INTO ASSIGNMENTS_${input.value} VALUES(1, 101, 20)
+INTO ASSIGNMENTS_${input.value} VALUES(2, 101, 25)
+INTO ASSIGNMENTS_${input.value} VALUES(3, 102, 30)
+INTO ASSIGNMENTS_${input.value} VALUES(4, 103, 15)
+INTO ASSIGNMENTS_${input.value} VALUES(5, 104, 18)
+INTO ASSIGNMENTS_${input.value} VALUES(1, 105, 22)
+INTO ASSIGNMENTS_${input.value} VALUES(2, 105, 20)
+SELECT * FROM DUAL;
+
+SELECT * FROM EMPLOYEES_${input.value};
+SELECT Emp_name, Emp_salary FROM EMPLOYEES_${input.value};
+SELECT DISTINCT Emp_department FROM EMPLOYEES_${input.value};
+
+SELECT Emp_department, COUNT(*) AS num_employees 
+FROM EMPLOYEES_${input.value} 
+GROUP BY Emp_department;
+
+SELECT Project_name, Project_budget FROM PROJECTS_${input.value};
+
+
+SELECT * FROM PROJECTS_${input.value} 
+WHERE Start_date > '02-01-2023';
+
+SELECT e.Emp_name, SUM(a.Hours_worked) AS total_hours_worked 
+FROM EMPLOYEES_${input.value} e 
+JOIN ASSIGNMENTS_${input.value} a ON e.Emp_id = a.Emp_id 
+GROUP BY e.Emp_name;
+
+SELECT * FROM PROJECTS_${input.value} 
+WHERE Project_budget > (SELECT AVG(Project_budget) FROM PROJECTS_${input.value});
+
+SELECT Emp_id 
+FROM ASSIGNMENTS_${input.value} 
+GROUP BY Emp_id 
+HAVING COUNT(*) > 1;
+
+SELECT e.* 
+FROM EMPLOYEES_${input.value} e 
+JOIN (
+    SELECT Emp_department, AVG(Emp_salary) AS avg_salary 
+    FROM EMPLOYEES_${input.value} 
+    GROUP BY Emp_department
+) d ON e.Emp_department = d.Emp_department 
+WHERE e.Emp_salary > d.avg_salary;
+
+SELECT * 
+FROM PROJECTS_${input.value} 
+WHERE Project_budget = (SELECT MAX(Project_budget) FROM PROJECTS_${input.value})
+   OR Project_budget = (SELECT MIN(Project_budget) FROM PROJECTS_${input.value});
+
+
+SELECT e.Emp_name, p.Project_name, a.Hours_worked 
+FROM EMPLOYEES_${input.value} e 
+JOIN ASSIGNMENTS_${input.value} a ON e.Emp_id = a.Emp_id 
+JOIN PROJECTS_${input.value} p ON a.Project_id = p.Project_id;
+
+SELECT e.Emp_name 
+FROM EMPLOYEES_${input.value} e 
+JOIN (
+    SELECT Emp_id, MAX(Hours_worked) AS max_hours_worked 
+    FROM ASSIGNMENTS_${input.value} 
+    GROUP BY Emp_id
+) a ON e.Emp_id = a.Emp_id;
+
+SELECT p.Project_name, AVG(a.Hours_worked) AS avg_hours_worked 
+FROM PROJECTS_${input.value} p 
+JOIN ASSIGNMENTS_${input.value} a ON p.Project_id = a.Project_id 
+GROUP BY p.Project_name;
+
+SELECT * 
+FROM EMPLOYEES_${input.value} 
+WHERE Emp_salary = (SELECT Emp_salary FROM EMPLOYEES_${input.value} WHERE Emp_name = 'Bob');
+
+
+SELECT COUNT(*) 
+FROM EMPLOYEES_${input.value} 
+WHERE Emp_id NOT IN (SELECT Emp_id FROM ASSIGNMENTS_${input.value} WHERE Project_id = 101);
+
+
+SELECT e.* 
+FROM EMPLOYEES_${input.value} e 
+JOIN ASSIGNMENTS_${input.value} a ON e.Emp_id = a.Emp_id 
+JOIN PROJECTS_${input.value} p ON a.Project_id = p.Project_id 
+WHERE p.Start_date > '03-01-2023';
+
+SELECT e.* 
+FROM EMPLOYEES_${input.value} e 
+JOIN ASSIGNMENTS_${input.value} a ON e.Emp_id = a.Emp_id 
+JOIN (
+    SELECT AVG(Emp_salary) AS avg_salary 
+    FROM EMPLOYEES_${input.value} 
+    WHERE Emp_id IN (SELECT Emp_id FROM ASSIGNMENTS_${input.value} WHERE Project_id = 105)
+) avg_sal ON e.Emp_salary > avg_sal.avg_salary;
+
+SELECT e.* 
+FROM EMPLOYEES_${input.value} e 
+JOIN ASSIGNMENTS_${input.value} a ON e.Emp_id = a.Emp_id 
+WHERE a.Hours_worked > 20;
+
+SELECT * 
+FROM EMPLOYEES_${input.value} 
+WHERE Emp_id NOT IN (SELECT Emp_id FROM ASSIGNMENTS_${input.value});`;
+                
+                // navigator.clipboard.writeText(content);
+                document.getElementById("textarea").value="Generating Command. Wait...";
+                setTimeout(() => {
+                    document.getElementById("textarea").value = content;
+                }, 1500);
+                // alert("Command Copied to You Clipboard.");
+            }
+        });
+    </script>
+</body>
+</html>
