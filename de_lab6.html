@@ -65,23 +65,17 @@
     </style>
 </head>
 <body>
-    <h1>DBE | LAB5</h1>
+    <h1>DBE | LAB6</h1>
     <div>
         <textarea id="textarea" cols="30" rows="10" readonly></textarea>
-        <input class="child" type="number" placeholder="Enter Regd. No.">
         <button class="child">Copy Command</button>
     </div>
     <script defer>
         document.getElementById("textarea").value="NO command";
-        var input = document.getElementsByClassName('child')[0];
-        var button = document.getElementsByClassName('child')[1];
+        var button = document.getElementsByClassName('child')[0];
 
         button.addEventListener("click",(e)=>{
-            if(!input.value){
-                alert("Enter reg no.");
-            }
-            else{
-                var content = `CREATE TABLE SALESMAN(
+            var content = `CREATE TABLE SALESMAN(
     salesman_id NUMBER(5,0) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     city VARCHAR(100) NOT NULL,
@@ -404,10 +398,11 @@ WHERE
                 document.getElementById("textarea").value="Generating Command. Wait...";
                 setTimeout(() => {
                     document.getElementById("textarea").value = content;
+                    navigator.clipboard.writeText(content);
+                    alert("Command Copied to You Clipboard.");
                 }, 1500);
-                // alert("Command Copied to You Clipboard.");
             }
-        });
+        );
     </script>
 </body>
 </html>
