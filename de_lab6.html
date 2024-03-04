@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBE | LAB5</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        div{
+            width: 100dvw;
+            height: 100dvh;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .child{
+            margin: 20px 0;
+            
+            border-radius: 10px;
+            outline: none !important;
+        }
+
+        input{
+            font-size: 30px;
+            border: 2px dotted red;
+            text-align: center;
+            padding: 10px 0;
+            width: 70vw;
+        }
+
+        input::-webkit-inner-spin-button{
+            display: none !important;
+        }
+
+        button{
+            border: none;
+            background: red;
+            font-weight: bolder;
+            color: white;
+            font-size: 25px;
+            cursor: pointer;
+            padding: 20px;
+        }
+
+        h1{
+            text-align: center;
+            width: 100dvw;
+            padding: 20px 0;
+        }
+
+        #textarea{
+            width: 90% !important;
+            background: rgba(0, 0, 0, 0.1);
+            border: 2px dotted red;
+            padding: 10px;
+            outline: none !important;
+        }
+    </style>
+</head>
+<body>
+    <h1>DBE | LAB5</h1>
+    <div>
+        <textarea id="textarea" cols="30" rows="10" readonly></textarea>
+        <input class="child" type="number" placeholder="Enter Regd. No.">
+        <button class="child">Copy Command</button>
+    </div>
+    <script defer>
+        document.getElementById("textarea").value="NO command";
+        var input = document.getElementsByClassName('child')[0];
+        var button = document.getElementsByClassName('child')[1];
+
+        button.addEventListener("click",(e)=>{
+            if(!input.value){
+                alert("Enter reg no.");
+            }
+            else{
+                var content = `CREATE TABLE SALESMAN(
+    salesman_id NUMBER(5,0) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    commission NUMBER(3,2) NOT NULL
+);
+
+INSERT ALL
+INTO SALESMAN VALUES(5001, 'James Hoog', 'New York', 0.15)
+INTO SALESMAN VALUES(5002, 'Nail Knite', 'Paris', 0.13)
+INTO SALESMAN VALUES(5005, 'Pit Alex', 'London', 0.11)
+INTO SALESMAN VALUES(5006, 'Mc Lyon', 'Paris', 0.14)
+INTO SALESMAN VALUES(5007, 'Paul Adam', 'Rome', 0.13)
+INTO SALESMAN VALUES(5003, 'Lauson Hen', 'San Jose', 0.12)
+SELECT * FROM DUAL;
+
+
+CREATE TABLE CUSTOMER(
+    customer_id NUMBER(5,0) PRIMARY KEY,
+    cust_name VARCHAR(100) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    grade NUMBER(5,0) NOT NULL,
+    salesman_id NUMBER(5,0) NOT NULL
+)
+
+INSERT ALL
+into CUSTOMER VALUES (3002, 'Nick Rimando', 'New York', 100, 5001)
+into CUSTOMER VALUES (3007, 'Brad Davis', 'New York', 200, 5001)
+into CUSTOMER VALUES (3005, 'Graham Zusi', 'California', 200, 5002)
+into CUSTOMER VALUES (3008, 'Julian Green', 'London', 300, 5002)
+into CUSTOMER VALUES (3004, 'Fabian Johnson',  'Paris', 300, 5006)
+SELECT * FROM DUAL;
+
+SELECT c.customer_id, c.salesman_id
+FROM CUSTOMER c
+INNER JOIN SALESMAN s ON c.salesman_id = s.salesman_id;
+
+SELECT c.customer_id, c.salesman_id, s.name AS salesman_name
+FROM CUSTOMER c
+LEFT OUTER JOIN SALESMAN s ON c.salesman_id = s.salesman_id;
+
+SELECT c.customer_id, c.salesman_id, s.name AS salesman_name, c.cust_name
+FROM CUSTOMER c
+RIGHT OUTER JOIN SALESMAN s ON c.salesman_id = s.salesman_id;
+
+SELECT customer_id
+FROM CUSTOMER
+NATURAL JOIN SALESMAN;
+
+SELECT s.name AS Salesman, c.cust_name, c.city
+FROM SALESMAN s
+INNER JOIN CUSTOMER c ON s.city = c.city;
+
+SELECT c.cust_name AS Customer_Name, c.city AS Customer_City, s.name AS Salesman, s.commission
+FROM CUSTOMER c
+JOIN SALESMAN s ON c.salesman_id = s.salesman_id
+WHERE s.commission > 0.12;
+
+
+SELECT c.cust_name AS Customer_Name, c.city AS Customer_City, c.grade, s.name AS Salesman, s.city AS Salesman_City
+FROM CUSTOMER c
+JOIN SALESMAN s ON c.salesman_id = s.salesman_id
+ORDER BY c.customer_id ASC;
+
+
+SELECT c.cust_name, c.city AS Customer_City, c.grade, s.name AS Salesman, s.city AS SalesmanCity
+FROM CUSTOMER c
+JOIN SALESMAN s ON c.salesman_id = s.salesman_id
+WHERE c.grade < 300
+ORDER BY c.customer_id ASC;
+
+--
+
+CREATE TABLE EMPLOYEE(
+    EMPLOYEEID VARCHAR(20) PRIMARY KEY,
+    FIRSTNAME VARCHAR(100) NOT NULL,
+    LASTNAME VARCHAR(100) NULL,
+    DEPTID VARCHAR(20) NOT NULL
+)
+
+INSERT ALL
+INTO EMPLOYEE VALUES('E62549', 'John', 'Doe', 'D1001')
+INTO EMPLOYEE VALUES('E82743', 'Priya', 'Sharma', 'D3002')
+INTO EMPLOYEE VALUES('E58461', 'Raj', 'Kumar', 'D1002')
+INTO EMPLOYEE VALUES('E95462', 'Ravi', ' ', 'D1001')
+INTO EMPLOYEE VALUES('E25947', 'Shreya', 'P', 'D3000')
+INTO EMPLOYEE VALUES('E42650', 'Jane', 'Scott', 'D3001')
+SELECT * FROM DUAL;
+
+
+CREATE TABLE DEPARTMENT(
+    DEPTID VARCHAR(20) NOT NULL,
+    DEPTNAME VARCHAR(100) NOT NULL,
+    LOCATION VARCHAR(100) NOT NULL
+)
+
+INSERT ALL
+INTO DEPARTMENT VALUES('D1001', 'Technology', 'Bangalore')
+INTO DEPARTMENT VALUES('D1002', 'Technology', 'Hyderabad')
+INTO DEPARTMENT VALUES('D3001', 'Sales', 'Gurugram')
+INTO DEPARTMENT VALUES('D3002', 'Operations', 'Hyderabad')
+INTO DEPARTMENT VALUES('D4002', 'Finance', 'Mumbai')
+SELECT * FROM DUAL;
+
+
+9.Find the ids of the employees who work for “Finance” Department.
+10. Find the names of the employee who work for “Technology” Department.
+11.Perform Natural join on EMPLOYEE and Department.
+12. Find the lastnames of the employees who work for “D1002”
+
+
+SELECT EMPLOYEEID 
+FROM EMPLOYEE 
+WHERE DEPTID = (SELECT DEPTID FROM DEPARTMENT WHERE DEPTNAME = 'Finance');
+
+
+SELECT FIRSTNAME, LASTNAME 
+FROM EMPLOYEE 
+WHERE DEPTID IN (SELECT DEPTID FROM DEPARTMENT WHERE DEPTNAME = 'Technology');
+
+
+SELECT *
+FROM EMPLOYEE
+NATURAL JOIN DEPARTMENT;
+
+
+SELECT LASTNAME 
+FROM EMPLOYEE 
+WHERE DEPTID = 'D1002';
+
+
+CREATE TABLE RESERVES(
+    SID NUMBER(5,0) NOT NULL,
+    BID NUMBER(5, 0) NOT NULL,
+    DAY DATE NOT NULL
+)
+
+INSERT ALL
+INTO RESERVES VALUES(22, 101, '10-10-1998')
+INTO RESERVES VALUES(22, 102, '10-10-1998')
+INTO RESERVES VALUES(22, 103, '10-08-1998')
+INTO RESERVES VALUES(22, 104, '10-07-1998')
+
+INTO RESERVES VALUES(31, 102, '11-10-1998')
+INTO RESERVES VALUES(31, 103, '11-06-1998')
+INTO RESERVES VALUES(31, 104, '11-12-1998')
+INTO RESERVES VALUES(64, 101, '09-05-1998')
+
+INTO RESERVES VALUES(64, 102, '09-08-1998')
+INTO RESERVES VALUES(74, 103, '09-08-1998')
+SELECT * FROM DUAL;
+
+
+
+
+CREATE TABLE BOATS(
+    BID NUMBER(5, 0) NOT NULL,
+    BNAME VARCHAR(50) NOT NULL,
+    COLOR VARCHAR(20) NOT NULL
+)
+
+INSERT ALL
+INTO BOATS VALUES(101, 'Interlake', 'blue')
+INTO BOATS VALUES(102, 'Interlake', 'red')
+INTO BOATS VALUES(103, 'Clipper', 'green')
+INTO BOATS VALUES(104, 'Marine', 'red')
+SELECT * FROM DUAL;
+
+
+CREATE TABLE SAILORS(
+    SID NUMBER(5,0) NOT NULL,
+    SNAME VARCHAR(20) NOT NULL,
+    RATING NUMBER(3,0) NOT NULL,
+    AGE NUMBER(5,1) NOT NULL
+)
+
+INSERT ALL
+INTO SAILORS VALUES (22, 'Dustin', 7, 45)
+INTO SAILORS VALUES (29, 'Brutus', 1, 33)
+INTO SAILORS VALUES (31, 'Lubber', 8, 55.5)
+INTO SAILORS VALUES (32, 'Andy', 8, 25.5)
+INTO SAILORS VALUES (58, 'Rusty', 10, 35)
+INTO SAILORS VALUES (64, 'Horatio', 7, 35)
+INTO SAILORS VALUES (71, 'Zorba', 10, 16)
+INTO SAILORS VALUES (74, 'Horatio', 9, 40)
+INTO SAILORS VALUES (85, 'Art', 3, 25.5)
+INTO SAILORS VALUES (95, 'Bob', 3, 63.5)
+SELECT * FROM DUAL;
+
+
+SELECT * 
+FROM SAILORS 
+WHERE SID IN (SELECT SID FROM RESERVES WHERE BID = 103);
+
+
+SELECT S.SNAME 
+FROM SAILORS S 
+JOIN RESERVES R ON S.SID = R.SID 
+JOIN BOATS B ON R.BID = B.BID 
+WHERE B.COLOR = 'red' 
+ORDER BY S.AGE;
+
+
+SELECT DISTINCT S.SNAME 
+FROM SAILORS S 
+JOIN RESERVES R ON S.SID = R.SID;
+
+
+SELECT DISTINCT S.SID 
+FROM SAILORS S 
+JOIN RESERVES R ON S.SID = R.SID 
+JOIN BOATS B ON R.BID = B.BID 
+WHERE B.COLOR IN ('red', 'green');
+
+
+SELECT S.SID, S.SNAME, R.DAY 
+FROM SAILORS S 
+CROSS JOIN RESERVES R;
+
+
+--
+
+
+CREATE TABLE EMPLOYEES(
+    EMPLOYEE_ID NUMBER(2,0) PRIMARY KEY,
+    EMPLOYEE_NAME VARCHAR(100) NOT NULL,
+    MANAGER_ID NUMBER(2,0)
+)
+
+DESC EMPLOYEES;
+
+INSERT ALL
+INTO EMPLOYEES VALUES(1, 'Zaid', 3)
+INTO EMPLOYEES VALUES(2, 'Rahul', 3)
+INTO EMPLOYEES VALUES(3, 'Raman', 4)
+INTO EMPLOYEES VALUES(4, 'Kamran', '')
+INTO EMPLOYEES VALUES(5, 'Farhan', 4)
+SELECT * FROM DUAL;
+
+SELECT * FROM EMPLOYEES;
+
+SELECT e1.EMPLOYEE_NAME AS Employee_Name, e2.EMPLOYEE_NAME AS Supervisor_Name
+FROM EMPLOYEES e1
+JOIN EMPLOYEES e2 ON e1.MANAGER_ID = e2.EMPLOYEE_ID;
+
+
+CREATE TABLE STUDENT(
+    ID NUMBER(1) PRIMARY KEY,
+    FIRST_NAME VARCHAR(100) NOT NULL,
+    LAST_NAME VARCHAR(100) NOT NULL
+)
+
+DESC STUDENT;
+
+INSERT ALL
+INTO STUDENT VALUES(1, 'Ellie', 'Willson')
+INTO STUDENT VALUES(1, 'Tom', 'Brown')
+INTO STUDENT VALUES(1, 'Sandra', 'Miller')
+SELECT * FROM STUDENT;
+
+
+
+CREATE TABLE ENROLLMENT(
+    STUDENT_ID NUMBER(1) NOT NULL,
+    COURSE_CODE VARCHAR(100) NOT NULL
+)
+
+DESC ENROLLMENT;
+
+
+INSERT ALL
+INTO ENROLLMENT VALUES(1, 'GD03')
+INTO ENROLLMENT VALUES(1, 'AP01')
+INTO ENROLLMENT VALUES(2, 'SL01') 
+INTO ENROLLMENT VALUES(3, 'SL01')
+SELECT * FROM DUAL;
+
+
+
+CREATE TABLE PAYMENT(
+    STUDENT_ID NUMBER(1) NOT NULL,
+    COURSE_CODE VARCHAR(100) NOT NULL,
+    STATUS VARCHAR(100) NOT NULL,
+    AMOUNT NUMBER(5,0) NOIT NULL
+)
+
+
+INSERT ALL
+INTO PAYMENT VALUES(1, 'GD03', 'paid', 230)
+INTO PAYMENT VALUES(1, 'AP01', 'pending', 100)
+INTO PAYMENT VALUES(2, 'SL01', 'pending', 80)
+INTO PAYMENT VALUES(3, 'SL01', 'pending', 110)
+SELECT * FROM DUAL;
+
+
+
+SELECT 
+    s.FIRST_NAME || ' ' || s.LAST_NAME AS STUDENT_NAME,
+    e.COURSE_CODE,
+    p.STATUS AS PAYMENT_STATUS,
+    p.AMOUNT
+FROM 
+    STUDENT s
+JOIN 
+    ENROLLMENT e ON s.ID = e.STUDENT_ID
+JOIN 
+    PAYMENT p ON s.ID = p.STUDENT_ID AND e.COURSE_CODE = p.COURSE_CODE;
+
+
+
+SELECT 
+    s.FIRST_NAME || ' ' || s.LAST_NAME AS STUDENT_NAME
+FROM 
+    STUDENT s
+JOIN 
+    ENROLLMENT e ON s.ID = e.STUDENT_ID
+WHERE 
+    e.COURSE_CODE = 'GD03';`;
+                
+                // navigator.clipboard.writeText(content);
+                document.getElementById("textarea").value="Generating Command. Wait...";
+                setTimeout(() => {
+                    document.getElementById("textarea").value = content;
+                }, 1500);
+                // alert("Command Copied to You Clipboard.");
+            }
+        });
+    </script>
+</body>
+</html>
